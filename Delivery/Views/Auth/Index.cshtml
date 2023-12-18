@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+    <title>Авторзация</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+</head>
+<body>
+    <form method="post">
+      <div class="container">
+        <h1>Авторизация</h1>
+        <hr>
+
+        <label for="email"><b>Почта</b></label>
+        <input type="text" placeholder="example@mail.com" name="email" required>
+
+        <label for="psw"><b>Пароль</b></label>
+        <input type="password" placeholder="password" name="psw" required>
+
+
+          <a style="color: red;">@ViewData["Message"]</a>
+
+
+        <button type="submit" class="registerbtn">Войти</button>
+      </div>
+
+      <div class="container signin">
+        <p>Нету аккаунта? <a asp-controller="Reg" asp-action="Index">Регистрация</a>.</p>
+      </div>
+    </form>
+
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+@model Delivery.Models.Category
+
+<!doctype html>
+<html>
+<head>
+    <title>Category</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+</head>
+<body>
+    @if(ViewData["Operation"].ToString() == "Изменить")
+    {
+      <form asp-controller="CompanyAdmin" asp-action="UpdateCategory" asp-route-id="@Model.Id" method="post">
+      <div class="container">
+        <h1>Изменить категорию</h1>
+        <hr>
+        
+        <label for="email"><b>Идентификатор: @Model.Id</b></label>
+        <hr>
+
+        <label for="name"><b>Название</b></label>
+        <input type="text" placeholder="Закуски" name="name" required value="@Model.Name">
+
+      </div>
+      <button type="submit" class="registerbtn">@ViewData["Operation"].ToString()</button>
+      </form>
+    }
+    else
+    {
+        <form asp-controller="CompanyAdmin" asp-action="CreateCategory" method="post">
+        <div class="container">
+        <h1>Создать категорию</h1>
+        <hr>
+
+        <label for="name"><b>Название</b></label>
+        <input type="text" placeholder="Закуски" name="name" required>
+
+      </div>
+      <button type="submit" class="registerbtn">@ViewData["Operation"].ToString()</button>
+      </form>
+    }
+</body>
+</html>

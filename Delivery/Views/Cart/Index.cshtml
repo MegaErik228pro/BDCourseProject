@@ -1,0 +1,81 @@
+@model IEnumerable<Delivery.Models.Product>
+@{
+    float? price = 0;
+}
+
+<!doctype html>
+<html>
+<head>
+    <title>Корзина</title>
+    <meta charset="utf-8" />
+    <style>
+       .b:hover{
+        border: #724caf solid 2px;
+        color: #724caf;
+       } 
+    </style>
+</head>
+<body>
+    <h2>Корзина</h2>
+    @if(Delivery.Models.Account.Cart.Count() == 0)
+    {
+        <h3>Ваша корзина пуста.</h3>
+    }
+    else
+    {
+        <div>
+        @foreach (var item in Delivery.Models.Account.Cart)
+        {
+            <div style="background: rgb(239 239 239);border-radius: 10px;height: fit-content;display: flex;flex-direction: row;align-content: center;margin-bottom: 10px;justify-content: space-between;">
+                <div style="display: flex;">
+                    <img style="border-radius: 10px;width: 150px;margin-top: 10px;margin-left: 10px;margin-bottom: 10px;" src=@item.Path/>
+                    <div>
+                        <a style="display: flex;width: 500px;margin-left: 20px;font-size: 24px;font-weight: 500;margin-top: 3px;">@item.Name</a>
+                        <div style="display: flex;justify-content: space-between;width: 200px;flex-direction: column;padding-left: 10px;padding-right: 10px;font-size: 14px;font-weight: 500;color: #7a7a7a;margin-bottom: 5px;margin-left: 10px;">
+                            <a style="color: black;font-weight: 500;font-size: 18px;">@item.Price BYN</a>
+                            <a>@item.Gram г</a>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex;flex-direction: column;justify-content: space-between;align-items: center;font-size: 18px;font-weight: 500;margin-top: 10px;margin-right: 10px;">
+                    <form asp-controller="Cart" asp-action="Add" asp-route-id=@item.Id method="post">
+                        <button class="b" style="border-radius: 10px;width: 180px;height: 40px;margin-bottom: 10px;font-weight: 500;">+</button>
+                    </form>
+                    <a>@item.Count</a>
+                    <form asp-controller="Cart" asp-action="Rem" asp-route-id=@item.Id method="post">
+                        <button class="b" style="border-radius: 10px;width: 180px;height: 40px;margin-bottom: 10px;font-weight: 500;">-</button>
+                    </form>
+                </div>
+            </div>
+        }
+        </div>
+        
+        <form asp-controller="Cart" asp-action="CreateOrder" method="post">
+            <div style="display: flex;justify-content: space-between;margin-top: 10px;margin-bottom: 10px;font-weight: 500;">
+                <div style="display: flex;">
+                    <label for="method">Выберите способ оплаты:</label>
+                    <select name="method">
+                        <option value="money">Наличные</option>
+                        <option value="card">Карта</option>
+                    </select>
+                </div>
+                @foreach(var item in Account.Cart)
+                {
+                    price += item.Price * item.Count;
+                }
+                <a style="display: flex;justify-content: flex-end;">Стоимость заказа: @price BYN</a>
+            </div>
+            @if (Account.IsAuth == true)
+            {
+                <button class="b" type="submit" style="background: white;border-radius: 10px;width: 100%;height: 40px;margin-bottom: 10px;font-weight: 500;">Оформить заказ</button>
+            }
+            else
+            {
+                <button type="submit" disabled="disabled" style="background: white;border-radius: 10px;width: 100%;height: 40px;margin-bottom: 10px;font-weight: 500;">Оформить заказ</button>
+                <a style="color: red;">Авторизуйтесь, чтобы оформить заказ. <a asp-controller="Auth" asp-action="Index">Войти</a></a>
+            }
+        </form>
+    }
+    
+</body>
+</html>

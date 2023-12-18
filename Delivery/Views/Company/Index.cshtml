@@ -1,0 +1,223 @@
+@model IEnumerable<Delivery.Models.Category>
+@{
+    bool InCart = false; 
+}
+<!doctype html>
+<html>
+<head>
+    <title>Delivery</title>
+    <meta charset="utf-8" />
+    <style>
+       button:hover{
+        border: #724caf solid 2px;
+        color: #724caf;
+       } 
+       .compItem{
+        width: 200px;height: 230px;position: absolute;
+       }
+       .compItem:hover{
+        cursor: pointer;
+       }
+       svg:hover{
+
+       }
+       .redb:hover{
+        border: red solid 2px;
+        color: red;
+       }
+    </style>
+</head>
+<body>
+    <div style="display: flex;align-content: center;align-items: center;justify-content: space-between;">
+        <h2>@Account.CompanyName</h2>
+
+
+<div id="modDialog" class="modal fade" >
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+
+
+
+        <div style="display: flex;">
+            <form style="display: flex;margin-right: 10px;" asp-controller="Company" asp-action="Search" method="post">
+                <svg style="width: 20px;margin-right: 5px;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <g id="Layer_60" data-name="Layer 60"><path d="m12 1a11 11 0 1 0 11 11 11 11 0 0 0 -11-11zm0 18a1 1 0 0 1 -1-1 1 1 0 0 1 2 0 1 1 0 0 1 -1 1zm1.53-6.3a.94.94 0 0 0 -.53.89v.41a1 1 0 0 1 -2 0v-.42a2.91 2.91 0 0 1 1.76-2.73 2 2 0 1 0 -2.76-1.85 1 1 0 0 1 -2 0 4 4 0 0 1 4.72-3.94 4 4 0 0 1 3.22 3.22 4 4 0 0 1 -2.41 4.41z" fill="rgb(0,0,0)"/>
+                <title>
+                    <title>Формат запроса:</title>
+                    <title>1 - Орехи</title>
+                    <title>2 - Молоко</title>
+                    <title>3 - Яйца</title>
+                    <title>4 - Рыба</title>
+                    <title>5 - Пшеница</title>
+                    <title>6 - Соя</title>
+                    <title>7 - Грибы</title>
+                    <title>8 - Цитрусовые</title>
+                    <title>Пример: 158</title>
+                </title>
+                </g>
+                </svg>
+                <input style="border-radius: 10px;padding-left: 5px;width: 100px;margin-right: 5px;" type="text" placeholder="Allergen" name="allergen">
+                <input style="border-radius: 10px;padding-left: 5px;width: 300px;margin-right: 5px;" type="text" placeholder="Wok" name="product">
+                <button style="border-radius: 10px;font-weight: 500;background-color: white;width: 100px;" type="submit" class="registerbtn">Поиск</button>
+            </form>
+        </div>
+    </div>
+    <div style="display: flex;justify-content: space-between;flex-wrap: wrap;flex-direction: column;">
+    @foreach (var item in Model)
+    {
+        @if(Account.AdminKey != Account.Company)
+        {
+            @if (item.Products.Count != 0)
+            {
+                <div>
+                <h3>@item.Name</h3>
+                <div style="display: flex;flex-direction: row;flex-wrap: wrap;margin-bottom: 5px;">
+                @foreach (var prod in item.Products)
+                {
+                    InCart = false;
+                    <div style="background: rgb(239 239 239);border-radius: 10px;width: 200px;height: fit-content;display: flex;flex-direction: column;align-content: center;align-items: center;margin-right: 10px;">
+                        @Html.ActionLink("", "Details", new { id = prod.Id }, new { @class = "compItem" })
+                        <img style="border-radius: 10px;width: 180px;margin-top: 10px;" src=@prod.Path/>
+                        <a style="display: flex;width: 200px;margin-left: 20px;font-size: 18px;font-weight: 500;margin-top: 3px;">@prod.Name</a>
+                        <div style="display: flex;justify-content: space-between;width: 200px;flex-direction: row;padding-left: 10px;padding-right: 10px;font-size: 14px;font-weight: 500;color: #7a7a7a;margin-bottom: 5px;">
+                            <a>@prod.Gram г</a>
+                            <a>@prod.Price BYN</a>
+                        </div>
+                        @foreach(var i in Account.Cart)
+                        {
+                            if(i.Id == prod.Id) InCart = true;
+                        }
+                        @if(Account.AdminKey == Account.Company)
+                        {
+                            <form asp-controller="CompanyAdmin" asp-action="Product" asp-route-id=@prod.Id asp-route-operation="Изменить" method="post">
+                                <button style="border-radius: 10px;width: 180px;height: 40px;margin-bottom: 10px;font-weight: 500;">Изменить</button>
+                            </form>
+                            <form asp-controller="CompanyAdmin" asp-action="DeleteProduct" asp-route-id=@prod.Id method="post">
+                                <button class="redb" style="border-radius: 10px;width: 180px;height: 40px;margin-bottom: 10px;font-weight: 500;">Удалить</button>
+                            </form>
+                        }
+                        else
+                        {
+                            @if(InCart == true)
+                            {
+                                <form asp-controller="Company" asp-action="DeleteFromCart" asp-route-id=@prod.Id method="post">
+                                    <button style="border-radius: 10px;width: 180px;height: 40px;margin-bottom: 10px;font-weight: 500;">Убрать</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-controller="Company" asp-action="AddToCart" asp-route-id=@prod.Id method="post">
+                                    <button style="border-radius: 10px;width: 180px;height: 40px;margin-bottom: 10px;font-weight: 500;">Добавить</button>
+                                </form>
+                            }
+                        }
+                        
+                    </div>
+                        @if(Account.AdminKey == Account.Company)
+                        {
+                            <form asp-controller="CompanyAdmin" asp-action="Product" asp-route-id=@item.Id asp-route-operation="Создать" method="post">
+                                <button style="border-radius: 10px;width: 200px;height: 100%;margin-bottom: 10px;font-weight: 500;">+</button>
+                            </form>
+                        }
+                    
+                }
+                </div>
+                </div>
+            }
+        }
+        else
+        {
+                <div>
+                    <div style="display: flex;justify-content: space-between;">
+                        <h3>@item.Name</h3>
+                        <div style="display: flex;align-items: center;">
+                            <form asp-controller="CompanyAdmin" asp-action="Category" asp-route-id=@item.Id asp-route-operation="Изменить" method="post">
+                                <button style="border-radius: 10px;width: 180px;margin-bottom: 10px;font-weight: 500;margin-right: 10px;">Изменить</button>
+                            </form>
+                            <form asp-controller="CompanyAdmin" asp-action="DeleteCategory" asp-route-id=@item.Id method="post">
+                                <button class="redb" style="border-radius: 10px;width: 180px;margin-bottom: 10px;font-weight: 500;">Удалить</button>
+                            </form>
+                        </div>
+                    </div>
+                <div style="display: flex;flex-direction: row;flex-wrap: wrap;margin-bottom: 5px;">
+                @foreach (var prod in item.Products)
+                {
+                    InCart = false;
+                    <div style="background: rgb(239 239 239);border-radius: 10px;width: 200px;height: fit-content;display: flex;flex-direction: column;align-content: center;align-items: center;margin-right: 10px;">
+                        @Html.ActionLink("", "Details", new { id = prod.Id }, new { @class = "compItem" })
+                        <img style="border-radius: 10px;width: 180px;margin-top: 10px;" src=@prod.Path/>
+                        <a style="display: flex;width: 200px;margin-left: 20px;font-size: 18px;font-weight: 500;margin-top: 3px;">@prod.Name</a>
+                        <div style="display: flex;justify-content: space-between;width: 200px;flex-direction: row;padding-left: 10px;padding-right: 10px;font-size: 14px;font-weight: 500;color: #7a7a7a;margin-bottom: 5px;">
+                            <a>@prod.Gram г</a>
+                            <a>@prod.Price BYN</a>
+                        </div>
+                        @foreach(var i in Account.Cart)
+                        {
+                            if(i.Id == prod.Id) InCart = true;
+                        }
+                        @if(Account.AdminKey == Account.Company)
+                        {
+                            <form asp-controller="CompanyAdmin" asp-action="Product" asp-route-id=@prod.Id asp-route-operation="Изменить" method="post">
+                                <button style="border-radius: 10px;width: 180px;height: 40px;margin-bottom: 10px;font-weight: 500;">Изменить</button>
+                            </form>
+                            <form asp-controller="CompanyAdmin" asp-action="DeleteProduct" asp-route-id=@prod.Id method="post">
+                                <button class="redb" style="border-radius: 10px;width: 180px;height: 40px;margin-bottom: 10px;font-weight: 500;">Удалить</button>
+                            </form>
+                        }
+                        else
+                        {
+                            @if(InCart == true)
+                            {
+                                <form asp-controller="Company" asp-action="DeleteFromCart" asp-route-id=@prod.Id method="post">
+                                    <button style="border-radius: 10px;width: 180px;height: 40px;margin-bottom: 10px;font-weight: 500;">Убрать</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-controller="Company" asp-action="AddToCart" asp-route-id=@prod.Id method="post">
+                                    <button style="border-radius: 10px;width: 180px;height: 40px;margin-bottom: 10px;font-weight: 500;">Добавить</button>
+                                </form>
+                            }
+                        }
+                        
+                    </div>
+                    
+                }
+                @if(Account.AdminKey == Account.Company)
+                        {
+                            <form asp-controller="CompanyAdmin" asp-action="Product" asp-route-id=@item.Id asp-route-operation="Создать" method="post">
+                                <button style="border-radius: 10px;width: 200px;height: 100%;margin-bottom: 10px;font-weight: 500;">+</button>
+                            </form>
+                        }
+                </div>
+                </div>
+        }
+        
+    }
+    @if(Account.AdminKey == Account.Company)
+    {
+        <form asp-controller="CompanyAdmin" asp-action="Category" asp-route-operation="Создать" method="post">
+            <button style="border-radius: 10px;width: 100%;height: 40px;margin-bottom: 10px;font-weight: 500;margin-top: 10px;">Добавить категорию</button>
+        </form>
+    }
+
+    </div>
+    @section scripts
+    {
+        <script type="text/javascript">
+    
+            $(function () {
+                $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+    
+                    e.preventDefault();
+                    $.get(this.href, function (data) {
+                        $('#dialogContent').html(data);
+                        $('#modDialog').modal('show');
+                    });
+                });
+            })
+        </script>
+    }
+</body>
+</html>

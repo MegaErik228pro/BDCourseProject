@@ -1,0 +1,46 @@
+@model IEnumerable<Delivery.Models.Order>
+
+<!doctype html>
+<html>
+<head>
+    <title>Заказы</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <h2>Все заказы</h2>
+    <table class="table">
+     <tr><th>Номер Заказа</th><th>Ресторан</th><th>Стоимость</th><th>Метод оплаты</th><th>Статус</th><th>Товары</th><th>Дата заказа</th><th>Пользователь</th></tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Company</td>
+            <td>@item.Price</td>
+            <td>@item.Method</td>
+            @if(@item.Status == "Принят")
+            {
+                <td style="color: green;">@item.Status</td>
+            }
+            @if(@item.Status == "Доставлен")
+            {
+                <td>@item.Status</td>
+            }
+            @if(@item.Status == "В пути")
+            {
+                <td style="color: green;">@item.Status</td>
+            }
+            @if(@item.Status == "Отменён")
+            {
+                <td style="color: rgb(128, 0, 0);">@item.Status</td>
+            }
+            <td>@item.Products</td>
+            <td>@item.Date</td>
+            <td>@item.Email<span style="color: blue;"> (ID @item.UserId)</span></td>
+        </tr>
+    }
+</table>
+<form asp-controller="Admin" asp-action="ClearOrders" method="post">
+    <button class="registerbtn" style="background-color: red; color: white; width:100%;">Очистить заказы</button>
+</form>
+</body>
+</html>

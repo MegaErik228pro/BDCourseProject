@@ -1,0 +1,48 @@
+@model IEnumerable<string>
+
+<!doctype html>
+<html>
+<head>
+    <title>Профиль</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+</head>
+<body>
+    <form asp-controller="Profile" asp-action="Update" method="post">
+  <div class="container">
+    <h1>Профиль</h1>
+    <hr>
+
+    <label for="email"><b>Почта: @Model.ElementAt(3)</b></label>
+    <hr>
+
+    <label for="name"><b>Имя</b></label>
+    <input type="text" placeholder="Ivan" name="name" value="@Model.ElementAt(0)" required>
+
+    <label for="phone"><b>Номер телефона</b></label>
+    <input type="text" placeholder="+375123456789" name="phone" value="@Model.ElementAt(1)" required>
+
+    <label for="address"><b>Адрес</b></label>
+    <input type="text" placeholder="Sverdlova 3a" name="adr" value="@Model.ElementAt(2)" required>
+
+
+
+    <label for="psw"><b>Пароль</b></label>
+    <input type="text" placeholder="password" name="psw" value="@Model.ElementAt(4)" required>
+
+    <a style="color: red;">@ViewData["Message"]</a>
+
+    <button type="submit" class="registerbtn">Изменить</button>
+  </div>
+</form>
+<form asp-controller="Profile" asp-action="Exit" method="post">
+    <button class="registerbtn">Выйти</button>
+</form>
+@if(Account.IsAdmin == false)
+{
+  <form asp-controller="Profile" asp-action="Delete" method="post">
+    <button style="background-color: red;" class="registerbtn">Удалить аккаунт</button>
+  </form>
+}
+</body>
+</html>

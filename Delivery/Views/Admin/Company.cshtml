@@ -1,0 +1,49 @@
+@model Delivery.Models.Company
+
+<!doctype html>
+<html>
+<head>
+    <title>Company</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+</head>
+<body>
+    @if(ViewData["Operation"].ToString() == "Изменить")
+    {
+      <form asp-controller="Admin" asp-action="Update" asp-route-idCompany="@Model.Id" method="post">
+      <div class="container">
+        <h1>Изменить компанию</h1>
+        <hr>
+        
+        <label for="email"><b>Идентификатор: @Model.Id</b></label>
+        <hr>
+
+        <label for="name"><b>Название</b></label>
+        <input type="text" placeholder="KFC" name="name" required value="@Model.Name">
+
+        <label for="path"><b>Путь к файлу</b></label>
+        <input type="text" placeholder="http://path.jpeg" name="path" required value="@Model.Path">
+
+      </div>
+      <button type="submit" class="registerbtn">@ViewData["Operation"].ToString()</button>
+      </form>
+    }
+    else
+    {
+      <form asp-controller="Admin" asp-action="Create" method="post">
+      <div class="container">
+        <h1>Создать компанию</h1>
+        <hr>
+
+        <label for="name"><b>Название</b></label>
+        <input type="text" placeholder="KFC" name="name" required>
+
+        <label for="path"><b>Путь к файлу</b></label>
+        <input type="text" placeholder="http://path.jpeg" name="path" required>
+
+      </div>
+      <button type="submit" class="registerbtn">@ViewData["Operation"].ToString()</button>
+      </form>
+    }
+</body>
+</html>

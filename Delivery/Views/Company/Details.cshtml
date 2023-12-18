@@ -1,0 +1,26 @@
+@model Delivery.Models.Product
+ 
+<div class="modal-content">
+    <div class="modal-header">
+    </div>
+    <div class="modal-body">
+        <div style="height: fit-content;display: flex;flex-direction: column;align-content: center;margin-bottom: 10px;justify-content: space-between;">
+                <div style="display: flex;">
+                    <img style="border-radius: 10px;width: 150px;margin-top: 10px;margin-left: 10px;margin-bottom: 10px;height: 150px;" src=@Model.Path/>
+                    <div>
+                        <a style="display: flex;width: 500px;margin-left: 20px;font-size: 24px;font-weight: 500;margin-top: 3px;">@Model.Name</a>
+                        <div style="display: flex;justify-content: space-between;width: 200px;flex-direction: column;padding-left: 10px;padding-right: 10px;font-size: 14px;font-weight: 500;color: #7a7a7a;margin-bottom: 5px;margin-left: 10px;">
+                            <a style="color: black;font-weight: 500;font-size: 18px;">@Model.Price BYN</a>
+                            <a>@Model.Gram г</a>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex;flex-direction: column;">
+                    <a style="color: black;font-weight: 500;font-size: 18px;">Состав:</a>
+                    <a style="color: black;font-weight: 400;font-size: 16px;">@Model.Description</a>
+                    <a style="color: black;font-weight: 500;font-size: 18px;">Аллергены:</a>
+                    <a style="color: black;font-weight: 400;font-size: 16px;">@Model.AllergensText</a>
+                </div>
+            </div>
+    </div>
+</div>

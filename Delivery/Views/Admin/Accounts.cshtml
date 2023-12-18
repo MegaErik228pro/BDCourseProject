@@ -1,0 +1,86 @@
+@model IEnumerable<Delivery.Models.User>
+
+<!doctype html>
+<html>
+<head>
+    <title>Аккаунты</title>
+    <meta charset="utf-8" />
+        <style>
+       .b:hover{
+        border: #724caf solid 2px;
+        color: #724caf;
+       } 
+    </style>
+</head>
+<body>
+    <h2>Все аккаунты</h2>
+    <table class="table">
+     <tr><th>ID</th><th>Имя</th><th>Номер телефона</th><th>Адрес</th><th>Почта</th><th>Пароль</th><th>Права</th><th>Компания (ключ)</th><th></th><th></th></tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td>@item.Phone</td>
+            <td>@item.Address</td>
+            <td>@item.Email</td>
+            <td>@item.Password</td>
+            <form asp-controller="Admin" asp-action="UpdateRights" asp-route-id=@item.Id method="post">
+            @if (item.IsAdmin == false)
+            {
+                <td>
+                        <select name="rights">
+                            <option value="user" selected>Пользователь</option>
+                            <option value="admin">Админ</option>
+                        </select>
+                </td>
+                <td>-</td>
+            }
+            else
+            {
+                <td>
+                        <select name="rights">
+                            <option value="user">Пользователь</option>
+                            <option value="admin" selected>Админ</option>
+                        </select>
+                </td>
+                if(item.AdminKey != null && item.AdminKey > 0)
+                {
+                    <td>
+                            <select name="company">
+                                @foreach (var com in Account.Companies)
+                                {
+                                    if (com.Id == item.AdminKey)
+                                    {
+                                        <option value="@com.Id" selected>@com.Name<span style="color: blue;"> (KEY @com.Id)</span></option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@com.Id">@com.Name<span style="color: blue;"> (KEY @com.Id)</span></option>
+                                    }
+                                }
+                                <option value="0">Полный доступ</option>
+                            </select>
+                    </td>
+                }
+                else if (item.AdminKey != null && item.AdminKey == 0)
+                {
+                    <td>
+                            <select name="company">
+                                @foreach (var com in Account.Companies)
+                                {
+                                    <option value="@com.Id">@com.Name<span style="color: blue;"> (KEY @com.Id)</span></option>
+                                }
+                                <option value="0" selected>Полный доступ</option>
+                            </select>
+                    </td>
+                }
+            }
+            <td><button type="submit" style="background: green;border-radius: 10px;width: 100%;color: white;">Изменить</button></td>
+            </form>
+            <td><form asp-controller="Admin" asp-action="DeleteUser" asp-route-id=@item.Id method="post"><button type="submit" style="background: red;border-radius: 10px;width: 100%;color: white;">Удалить</button></form></td>
+        </tr>
+    }
+</table>
+</body>
+</html>

@@ -1,0 +1,40 @@
+@model List<string>
+<!doctype html>
+<html>
+<head>
+    <title>Регистрация</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+</head>
+<body>
+    <form method="post">
+  <div class="container">
+    <h1>Регистрация</h1>
+    <hr>
+
+    <label for="name"><b>Имя</b></label>
+    <input type="text" placeholder="Ivan" name="name" required value="@Model.ElementAt(0)">
+
+    <label for="phone"><b>Номер телефона</b></label>
+    <input type="text" placeholder="+375123456789" name="phone" required value="@Model.ElementAt(1)">
+
+    <label for="email"><b>Почта</b></label>
+    <input type="text" placeholder="example@mail.com" name="email" required value="@Model.ElementAt(4)">
+
+    <label for="psw"><b>Пароль</b></label>
+    <input type="password" placeholder="password" name="psw" required value="@Model.ElementAt(3)">
+
+    <label for="address"><b>Адрес</b></label>
+    <input type="text" placeholder="Sverdlova 3a" name="adr" required value="@Model.ElementAt(2)">
+
+    <a style="color: red;">@ViewData["Message"]</a>
+
+    <button type="submit" class="registerbtn">Зарегестрироваться</button>
+  </div>
+
+  <div class="container signin">
+    <p>Есть аккаунт? <a asp-controller="Auth" asp-action="Index">Войти</a>.</p>
+  </div>
+</form>
+</body>
+</html>
